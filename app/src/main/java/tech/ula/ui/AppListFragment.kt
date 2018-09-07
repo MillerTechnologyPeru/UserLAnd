@@ -4,9 +4,12 @@ import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.view.* // ktlint-disable no-wildcard-imports
 import android.widget.AdapterView
+import android.widget.TextView
 import kotlinx.android.synthetic.main.frag_app_list.*
 import tech.ula.R
 import tech.ula.model.entities.App
@@ -63,6 +66,18 @@ class AppListFragment : Fragment() {
             val selectedApp = appList[position]
             println("Clicked on APP: ${selectedApp.name}")
         }
+
+        val swipeLayout = activityContext.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        swipeLayout.setOnRefreshListener(
+                SwipeRefreshLayout.OnRefreshListener {
+                    println("Refreshing")
+                    Handler().postDelayed(Runnable {
+                        kotlin.run {
+                            swipeLayout.isRefreshing = false
+                        }
+                    }, 4000)
+                }
+        )
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo) {
